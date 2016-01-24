@@ -69,7 +69,7 @@ class StadiumAuthenticatorApp(Ice.Application):
         if self.meta == None:
             raise RuntimeError("Invalid proxy")
 
-        self.adapter = ic.createObjectAdapterWithEndpoints("AuthAdapter", "tcp -h {}".format(self.config['mumble']['host']))
+        self.adapter = ic.createObjectAdapterWithEndpoints("AuthAdapter", "tcp -p {}".format(self.config['general']['auth-port']))
         self.adapter.activate()
 
         metacbprx = self.adapter.addWithUUID(AuthenticatorAttacher(self, print_debug))
