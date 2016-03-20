@@ -23,8 +23,6 @@ class StadiumAuthenticator(Murmur.ServerAuthenticator):
         super().__init__()
 
     def authenticate(self, name, pw, certs, certhash, certstrong, newname = None, groups = None):
-        self.print_debug("Authenticating the user with entered username", name)
-
         try:
             if name == "SuperUser":
                 return(-2, None, None)
@@ -32,12 +30,10 @@ class StadiumAuthenticator(Murmur.ServerAuthenticator):
             record = self.app.db_abs.get_user_by_password(pw)
 
             if record == None:
-                self.print_debug("Authentication failed")
+                self.print_debug("Authentication failed with password ", pw)
                 return(-1, None, None)
 
-            mumble_name = record[2]
-            if mumble_name == None: mumble_name = record[1]
-
+            mumble_name = record[1]
             _id = record[0]
 
             # Don't check if the user is already connected. Mumble will deal with that.
@@ -51,7 +47,7 @@ class StadiumAuthenticator(Murmur.ServerAuthenticator):
             #
             # if already_connected: return (-1, None, None)
 
-            self.print_debug("Authentication succeeded, user's real name is ", record[1])
+            self.print_debug("Authentication succeeded, user's mumble name is ", record[1])
             return (_id, mumble_name, None)
         except:
             return(-1, None, None)
